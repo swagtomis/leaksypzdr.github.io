@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wyszukiwarka graczy</title>
+    <style>
+        #result {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Wyszukiwarka graczy</h1>
+    <input type="text" id="searchInput" placeholder="Wpisz nazwę gracza...">
+    <button onclick="search()">Szukaj</button>
+    <div id="result"></div>
+
+    <script>
+        function search() {
+            var input = document.getElementById("searchInput").value;
+            var xmlhttp = new XMLHttpRequest();
+            var url = "all.txt";
+
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    var allData = xmlhttp.responseText;
+                    var lines = allData.split('\n');
+                    var found = false;
+                    var result = "";
+
+                    for (var i = 0; i < lines.length; i++) {
+                        var line = lines[i];
+                        if (line.includes(input)) {
+                            result += line + "<br>";
+                            found = true;
+                        }
+                    }
+
+                    if (!found) {
+                        result = "Brak wyników dla: " + input;
+                    }
+
+                    document.getElementById("result").innerHTML = result;
+                }
+            };
+
+            xmlhttp.open("GET", url, true);
+            xmlhttp.send();
+        }
+    </script>
+</body>
+</html>
